@@ -14,32 +14,23 @@ def makeRequest(url, timeout=10):
         return False
 
 
-def checkIfExisting(url):
-    """Check if url exists"""
-    response = makeRequest(url)
-    if not response:
-        print(f'The URL {url} is not accessible. Status code: {response.status_code}')
-        return False
-    else:
-        print(f'The URL {url} is valid and opens properly.')
-        return True
 
 
 def checkIfValidRobots(url):
     """Check if robots.txt is present for url and sitemaps are present on robots.txt"""
-    if checkIfExisting(url):
-        response = makeRequest(url + '/robots.txt')
-        if response:
-            print('robots.txt exists')
-            if 'Sitemap:' in response.text:
-                print('Sitemap found in robots.txt')
-                return True
-            else:
-                print('No Sitemap found in robots.txt')
-                return checkSitemapXml(url)
+    response = makeRequest(url + '/robots.txt')
+    if response:
+        print('robots.txt exists')
+        if 'Sitemap:' in response.text:
+            print('Sitemap found in robots.txt')
+            return True
         else:
-            print('No robots.txt found. Checking for sitemap.xml')
+            print('No Sitemap found in robots.txt')
             return checkSitemapXml(url)
+    else:
+        print('No robots.txt found. Checking for sitemap.xml')
+        return checkSitemapXml(url)
+
 
 
 def extractSitemapLinks(url):
