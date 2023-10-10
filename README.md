@@ -5,13 +5,13 @@ This project aims to parse and validate sitemaps according to certain criteria. 
 1. Parse sitemaps and check if `news:news` tag is present on sitemap.
    - If not, flag it as `False`.
    - Put `loc` into a variable.
+   - If `loc` is present, check if `lastmod` or `news:publication_date` tags are present.
 
 ## To-Do
 - [ ] If `loc` is not present, check if `sitemap` tag is present.
 - [ ] Try opening `sitemap` tag.
   - [ ] If `sitemap` is not present, mark media as invalid.
 - [ ] Repeat the function to ensure complete validation.
-- [ ] If `loc` is present, check if `lastmod` or `news:publication_date` tags are present.
 - [ ] Ensure publication date is not older than 2 months.
 - [ ] Check if `news:language` tag is present.
   - [ ] If not, flag it as `False`.
