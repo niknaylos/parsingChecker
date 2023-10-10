@@ -2,9 +2,8 @@
 
 This project aims to parse and validate sitemaps according to certain criteria. Below are the steps and checks performed by the code:
 
-1. Parse sitemaps and check if `news:news` tag is present on sitemap.
+Parse sitemaps and check if `news:news` tag is present on sitemap.
    - If not, flag it as `False`.
-   - Put `loc` into a variable.
    - If `loc` is present, checking if `lastmod` or `news:publication_date` tags are present.
    - If `loc` is not present, checking if `sitemap` tag is present.
    - Recursively check if nested sitemaps contain valid URLs
