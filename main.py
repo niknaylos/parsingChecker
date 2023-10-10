@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 def checkIfExisting(url):
     """Check if url exists"""
     try:
-        response = requests.get(url, timeout=10)  # Set a timeout to ensure the request doesn't hang
+        response = requests.get(url, timeout=10)
         if response.status_code == 200:
             print(f'The URL {url} is valid and opens properly.')
             return True
