@@ -141,8 +141,8 @@ def retrieveLocation(sitemapUrl):
             if location:
                 locationUrl = location[0].text
                 try:
-                    locationResponse = requests.get(locationUrl, timeout=10)
-                    if locationResponse.status_code == 200:
+                    locationResponse = makeRequest(locationUrl)
+                    if locationResponse:
                         return locationUrl
                     else:
                         return False
