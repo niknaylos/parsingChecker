@@ -1,6 +1,7 @@
 Parse sitemaps, check if <news:news> is present on sitemap, +
 else flag it as False, +
 put <loc> into variable, +
+
 #TODO
 if no <loc> check if <sitemap> is present,
 try opening <sitemap>,
