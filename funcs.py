@@ -88,12 +88,11 @@ def publicationDateExists(sitemapUrl):
         if lastMod:
             # print(f'lastmod is present for sitemap {sitemapUrl}')
             return True
-        else:
-            if pubdate:
+        elif pubdate:
                 # print(f'publication date is present for sitemap {sitemapUrl}')
-                return True
-            else:
-                return False
+            return True
+        else:
+            return False
 
 
 def retrieveLocation(sitemapUrl):
