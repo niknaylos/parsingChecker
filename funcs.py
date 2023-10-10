@@ -86,21 +86,32 @@ def publicationDateExists(sitemapUrl):
             return False
 
 
-def retrieveLocation(sitemapUrl):
+def processSitemap(sitemapUrl):
     response = makeRequest(sitemapUrl)
     if response:
         soup = bs(response.content, 'xml')
-        location = soup.find_all('loc')
-        if location:
-            locationUrl = location[0].text
+        locTags = soup.find_all('loc')
+        sitemapTags = soup.find_all('sitemap')
+        if len(sitemapTags) > 0:
+            # Recursion to check for sitemap tags inside the sitemap if loc is not found
+            for sitemapTag in sitemapTags:
+                sitemapUrl = sitemapTag.find('loc').text
+                nestedLocationUrl = processSitemap(sitemapUrl)
+                if nestedLocationUrl:
+                    return nestedLocationUrl  # Return the first working URL found during recursive calls
+        for i, locTag in enumerate(locTags):
+            if i >= 10:
+                break
+            locationUrl = locTag.text
             locationResponse = makeRequest(locationUrl)
             if locationResponse:
                 return locationUrl
-            else:
-                return False
-        else:
-            print('no loc found')
-            return False
+
+        print(f'No working URL found for media {sitemapUrl}')
+        return False
+    else:
+        print('Failed to retrieve sitemap from', sitemapUrl)
+        return False
 
 
 """

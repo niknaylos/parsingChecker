@@ -11,6 +11,7 @@ if checkIfValidRobots(url):
             break
         elif len(sitemapLinks) > 0:
             sitemapUrl = sitemapLinks[0]
+            processSitemap(sitemapUrl)
             if publicationDateExists(sitemapUrl):
                 lastmodFlag = True
                 if newsTagExists(sitemapUrl):
@@ -21,8 +22,8 @@ if checkIfValidRobots(url):
 
 if newsTagFlag and lastmodFlag:
     print(f'<news:news> and lastmod / publication date is available for at least one sitemap, url: {sitemapUrl}')
-    loc = retrieveLocation(sitemapUrl)
-    print(loc)
+    locTag = processSitemap(sitemapUrl)
+    print(locTag)
 else:
     print('Not valid')
 
