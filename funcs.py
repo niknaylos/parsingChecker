@@ -93,14 +93,10 @@ def retrieveLocation(sitemapUrl):
         location = soup.find_all('loc')
         if location:
             locationUrl = location[0].text
-            try:
-                locationResponse = makeRequest(locationUrl)
-                if locationResponse:
-                    return locationUrl
-                else:
-                    return False
-            except requests.exceptions.RequestException as e:
-                print(f'An error occurred: {e}')
+            locationResponse = makeRequest(locationUrl)
+            if locationResponse:
+                return locationUrl
+            else:
                 return False
         else:
             print('no loc found')
