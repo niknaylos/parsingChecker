@@ -18,6 +18,6 @@ This project aims to parse and validate sitemaps according to certain criteria. 
 
 ## Meta Tags Validation
 Check if the following meta tags are present on the webpage:
-- `og:type` content set to `article`.
-- `og:locale` or `html/lang` or `Content-Type` set to `en`.
+- [ ] `og:type` content set to `article`.
+- [ ] `og:locale` or `html/lang` or `Content-Type` set to `en`.
    - If both are not present and `news:language` flag is not `True`, mark media as invalid.
