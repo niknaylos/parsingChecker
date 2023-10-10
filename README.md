@@ -13,4 +13,4 @@ check if news:language is present. If not – flag = False.
 Check if metatags are present on webpage:
 a) og:type content: article,
 b) og:locale OR html/lang OR Content-Type = "en",
-/// if both are not present – check ifnews:language> flag is True, if not – media invalid.
+/// if both are not present – check if news:language> flag is True, if not – media invalid.
