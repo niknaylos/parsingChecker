@@ -15,7 +15,7 @@ This project aims to parse and validate sitemaps according to certain criteria. 
 - [ ] Ensure publication date is not older than 2 months.
 - [ ] Check if `news:language` tag is present.
   - [ ] If not, flag it as `False`.
-
+- [ ] Remove user inputs and base it on file reading
 ## Meta Tags Validation
 Check if the following meta tags are present on the webpage:
 - [ ] `og:type` content set to `article`.
