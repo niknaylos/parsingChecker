@@ -21,8 +21,7 @@ if checkIfValidRobots(url):
                 print(f'Loc Tag: {locTag}')
                 print(f'News Tag Present: {newsTagFlag}')
                 break  # Exit the loop if a valid locTag is found
-        # else:
-        #     print(f'Publication date in sitemap {i + 1} is too old, not valid or missing.')
+
     if checkType(locTag):
         print(f'{locTag} is an article')
         isArticle = True
