@@ -7,8 +7,8 @@ Parse sitemaps and check if `news:news` tag is present on sitemap.
    - If `loc` is present, checking if `lastmod` or `news:publication_date` tags are present.
    - If `loc` is not present, checking if `sitemap` tag is present.
    - Recursively check if nested sitemaps contain valid URLs
+   - Ensure publication date is not older than 2 months.
 ## To-Do
-- [ ] Ensure publication date is not older than 2 months.
 - [ ] Check if `news:language` tag is present.
   - [ ] If not, flag it as `False`.
 - [ ] Remove user inputs and base it on file reading
