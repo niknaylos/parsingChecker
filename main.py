@@ -4,26 +4,22 @@ url = input('input url: ')
 sitemapLinks = extractSitemapLinks(url)
 sitemapUrl = ''
 newsTagFlag = False
-lastmodFlag = False
 if checkIfValidRobots(url):
-    for i in sitemapLinks[:]:
-        if newsTagFlag and lastmodFlag:
-            break
-        elif len(sitemapLinks) > 0:
-            sitemapUrl = sitemapLinks[0]
-            processSitemap(sitemapUrl)
-            if publicationDateExists(sitemapUrl):
-                lastmodFlag = True
-                if newsTagExists(sitemapUrl):
-                    newsTagFlag = True
-                sitemapLinks.pop(0)
-        else:
-            break
+    sitemapLinks = extractSitemapLinks(url)
 
-if newsTagFlag and lastmodFlag:
-    print(f'<news:news> and lastmod / publication date is available for at least one sitemap, url: {sitemapUrl}')
-    locTag = processSitemap(sitemapUrl)
-    print(locTag)
+    for i, sitemapUrl in enumerate(sitemapLinks):
+        newsTagFlag = newsTagExists(sitemapUrl)
+        publicationDate = publicationDateExists(sitemapUrl)[0]
+
+        if publicationDate and checkIfDateValid(publicationDate):
+            locTag = processSitemap(sitemapUrl)
+            if locTag:
+                print(f'Valid publication date and loc tag found for sitemap {i + 1}, url: {sitemapUrl}')
+                print(f'Loc Tag: {locTag}')
+                print(f'News Tag Present: {newsTagFlag}')
+                break  # Exit the loop if a valid locTag is found
+        else:
+            print(f'Publication date in sitemap {i + 1} is not valid or missing.')
 else:
-    print('Not valid')
+    print('Not valid due to missing or invalid robots.txt')
 
