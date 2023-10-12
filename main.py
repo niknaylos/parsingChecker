@@ -27,7 +27,7 @@ if checkIfValidRobots(url):
         print(f'{locTag} is an article')
         isArticle = True
     else:
-        print(f'{locTag} is not an article')
+        print(f'{locTag} has no og:type article')
         if newsTagFlag:
             isArticle = True
     if isArticle:
@@ -40,7 +40,7 @@ if checkIfValidRobots(url):
 else:
     print('Not valid due to missing or invalid robots.txt')
 
-if not isArticle and newsTagFlag:
+if not isArticle:
     print('Media is invalid')
 else:
     print('Media is valid')
