@@ -3,6 +3,7 @@ import re
 from bs4 import BeautifulSoup as bs
 from datetime import datetime, timedelta
 import pytz
+from dateutil import parser
 
 
 def makeRequest(url, timeout=10):
@@ -116,21 +117,22 @@ def processSitemap(sitemapUrl):
 
 def checkIfDateValid(realDate):
     try:
-        date = datetime.strptime(realDate, '%Y-%m-%dT%H:%M:%SZ')
-        date = date.replace(tzinfo=pytz.UTC)
-        currentDate = datetime.utcnow().replace(tzinfo=pytz.UTC)
-        invalidDate = currentDate - timedelta(days=60)
-        if invalidDate <= date <= currentDate:
-            print('Valid date found')
-            return True
-        else:
-            print('Date is either 2 months old or in the future')
-            return False
+        date = parser.parse(realDate)
     except ValueError:
         print('Incorrect date format, check is skipped')
         return None
 
+    # Ensure the date is in UTC timezone
+    date = date.astimezone(pytz.UTC)
+    currentDate = datetime.utcnow().replace(tzinfo=pytz.UTC)
+    invalidDate = currentDate - timedelta(days=60)
 
+    if invalidDate <= date <= currentDate:
+        print('Valid date found')
+        return True
+    else:
+        print('Date is either 2 months old or in the future')
+        return False
 
     """
 Parse sitemaps, check if <news:news> is present on sitemap, +

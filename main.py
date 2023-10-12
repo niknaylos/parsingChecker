@@ -9,9 +9,10 @@ if checkIfValidRobots(url):
 
     for i, sitemapUrl in enumerate(sitemapLinks):
         newsTagFlag = newsTagExists(sitemapUrl)
-        publicationDate = publicationDateExists(sitemapUrl)[0]
+        publicationDate = publicationDateExists(sitemapUrl)[1]
+        validDate = checkIfDateValid(publicationDate)
 
-        if publicationDate and checkIfDateValid(publicationDate):
+        if publicationDate and (validDate or validDate is None):
             locTag = processSitemap(sitemapUrl)
             if locTag:
                 print(f'Valid publication date and loc tag found for sitemap {i + 1}, url: {sitemapUrl}')
@@ -20,6 +21,7 @@ if checkIfValidRobots(url):
                 break  # Exit the loop if a valid locTag is found
         else:
             print(f'Publication date in sitemap {i + 1} is not valid or missing.')
+            """todo : only check if date could be incorrect and notify instead of stopping script"""
 else:
     print('Not valid due to missing or invalid robots.txt')
 
