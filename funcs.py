@@ -127,14 +127,55 @@ def checkIfDateValid(realDate):
     currentDate = datetime.utcnow().replace(tzinfo=pytz.UTC)
     invalidDate = currentDate - timedelta(days=60)
 
-    if invalidDate <= date <= currentDate:
+    if invalidDate <= date:
         print('Valid date found')
+        if date > currentDate:
+            print(f'date could be in the future')
         return True
     else:
-        print('Date is either 2 months old or in the future')
+        print('Date could be 2 months old')
         return False
 
-    """
+
+def checkType(url):
+    response = makeRequest(url)
+    if response:
+        soup = bs(response.content, 'html.parser')
+
+        # Check for og:type meta tag with content set to article
+        og_type_tag = soup.find('meta', {'property': 'og:type', 'content': 'article'})
+        if og_type_tag:
+            print(f"Meta tag og:type with content 'article' found.")
+            return True
+        else:
+            print(f"Meta tag og:type with content 'article' not found.")
+            return False
+    else:
+        print(f"Failed to retrieve the webpage. HTTP Status Code: {response.status_code}")
+        return False
+
+
+"""        # Check for og:locale meta tag
+        og_locale_tag = soup.find('meta', {'property': 'og:locale'})
+        if og_locale_tag:
+            print(f"Meta tag og:locale found with content '{og_locale_tag['content']}'.")
+        else:
+            print(f"Meta tag og:locale not found.")
+
+        # Check for html lang attribute
+        html_lang_tag = soup.find('html', lang=True)
+        if html_lang_tag:
+            print(f"HTML lang attribute found with value '{html_lang_tag['lang']}'.")
+        else:
+            print(f"HTML lang attribute not found.")
+
+        # Check for Content-Type meta tag
+        content_type_tag = soup.find('meta', {'http-equiv': 'Content-Type'})
+        if content_type_tag:
+            print(f"Meta tag Content-Type found with content '{content_type_tag['content']}'.")
+        else:
+            print(f"Meta tag Content-Type not found.")"""
+"""
 Parse sitemaps, check if <news:news> is present on sitemap, +
 else flag it as False, +
 put <loc> into variable, +
