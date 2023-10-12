@@ -1,6 +1,8 @@
 import requests
 import re
 from bs4 import BeautifulSoup as bs
+from datetime import datetime, timedelta
+import pytz
 
 
 def makeRequest(url, timeout=10):
@@ -12,8 +14,6 @@ def makeRequest(url, timeout=10):
     except requests.exceptions.RequestException as e:
         print(f'An error occurred: {e}')
         return False
-
-
 
 
 def checkIfValidRobots(url):
@@ -30,7 +30,6 @@ def checkIfValidRobots(url):
     else:
         print('No robots.txt found. Checking for sitemap.xml')
         return checkSitemapXml(url)
-
 
 
 def extractSitemapLinks(url):
@@ -75,13 +74,14 @@ def publicationDateExists(sitemapUrl):
     if response:
         soup = bs(response.content, 'xml')
         lastMod = soup.find_all('lastmod')
-        pubdate = soup.find_all('news:publication_date')
+        pubDate = soup.find_all('news:publication_date')
+        realDate = []
         if lastMod:
-            # print(f'lastmod is present for sitemap {sitemapUrl}')
-            return True
-        elif pubdate:
-                # print(f'publication date is present for sitemap {sitemapUrl}')
-            return True
+            realDate = [tag.text for tag in lastMod]  # Extracting text content from the tags
+            return realDate
+        elif pubDate:
+            realDate = [tag.text for tag in pubDate]  # Extracting text content from the tags
+            return realDate
         else:
             return False
 
@@ -114,7 +114,25 @@ def processSitemap(sitemapUrl):
         return False
 
 
-"""
+def checkIfDateValid(realDate):
+    try:
+        date = datetime.strptime(realDate, '%Y-%m-%dT%H:%M:%SZ')
+        date = date.replace(tzinfo=pytz.UTC)
+        currentDate = datetime.utcnow().replace(tzinfo=pytz.UTC)
+        invalidDate = currentDate - timedelta(days=60)
+        if invalidDate <= date <= currentDate:
+            print('Valid date found')
+            return True
+        else:
+            print('Date is either 2 months old or in the future')
+            return False
+    except ValueError:
+        print('Incorrect date format, check is skipped')
+        return None
+
+
+
+    """
 Parse sitemaps, check if <news:news> is present on sitemap, +
 else flag it as False, +
 put <loc> into variable, +
@@ -131,4 +149,4 @@ Check if metatags are present on webpage:
 a) og:type content: article,
 b) og:locale OR html/lang OR Content-Type = "en",
 /// if both are not present – check if <news:language> flag is True, if not – media invalid.
-"""
+    """
