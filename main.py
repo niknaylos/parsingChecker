@@ -21,7 +21,6 @@ if checkIfValidRobots(url):
                 break  # Exit the loop if a valid locTag is found
         # else:
         #     print(f'Publication date in sitemap {i + 1} is too old, not valid or missing.')
-            """todo : only check if date could be incorrect and notify instead of stopping script"""
 else:
     print('Not valid due to missing or invalid robots.txt')
 
