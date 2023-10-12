@@ -58,8 +58,8 @@ def newsTagExists(sitemapUrl):
     response = makeRequest(sitemapUrl)
     if response:
         soup = bs(response.content, 'xml')
-        news_tags = soup.find_all('news:news')
-        if news_tags:
+        newsTags = soup.find_all('news:news')
+        if newsTags:
             # print(f'Tag <news:news> found in sitemap at {sitemapUrl}')
             return True
         else:
@@ -70,13 +70,56 @@ def newsTagExists(sitemapUrl):
         return False
 
 
+def newsLangExists(sitemapUrl):
+    if newsTagExists(sitemapUrl):
+        response = makeRequest(sitemapUrl)
+        soup = bs(response.content, 'xml')
+        langTag = soup.find_all('news:language')
+        if langTag:
+            print(f'found news:language on sitemap')
+            return True
+        else:
+            print(f'news:language is not found')
+            return False
+
+
+def newsArticleLang(url):
+    response = makeRequest(url)
+    if response:
+        soup = bs(response.content, 'html.parser')
+        og_locale_tag = soup.find('meta', {'property': 'og:locale'})
+        if og_locale_tag:
+            print(f"Meta tag og:locale found with content '{og_locale_tag['content']}'.")
+            return True
+        else:
+            print(f"Meta tag og:locale not found.")
+
+        # Check for html lang attribute
+        html_lang_tag = soup.find('html', lang=True)
+        if html_lang_tag:
+            print(f"HTML lang attribute found with value '{html_lang_tag['lang']}'.")
+            return True
+        else:
+            print(f"HTML lang attribute not found.")
+
+        # Check for Content-Type meta tag
+        content_type_tag = soup.find('meta', {'http-equiv': 'Content-Type'})
+        if content_type_tag:
+            print(f"Meta tag Content-Type found with content '{content_type_tag['content']}'.")
+            return True
+        else:
+            print(f"Meta tag Content-Type not found.")
+            return False
+    else:
+        print(f"Failed to retrieve the webpage. HTTP Status Code: {response.status_code}")
+        return False
+
 def publicationDateExists(sitemapUrl):
     response = makeRequest(sitemapUrl)
     if response:
         soup = bs(response.content, 'xml')
         lastMod = soup.find_all('lastmod')
         pubDate = soup.find_all('news:publication_date')
-        realDate = []
         if lastMod:
             realDate = [tag.text for tag in lastMod]  # Extracting text content from the tags
             return realDate
