@@ -44,6 +44,8 @@ def extractSitemapLinks(url):
             return False
     elif checkSitemapXml(url):
         return url
+    else:
+        return False
 
 
 def checkSitemapXml(url):
