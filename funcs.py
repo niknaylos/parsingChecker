@@ -34,16 +34,18 @@ def checkIfValidRobots(url):
 
 
 def extractSitemapLinks(url):
+
     if checkIfValidRobots(url):
         response = makeRequest(url + '/robots.txt')
         if response:
             sitemapLinks = re.findall(r'Sitemap:\s*(https?://\S+)', response.text, re.IGNORECASE)
             return sitemapLinks
         else:
-            print(f'Failed to retrieve robots.txt from {url}/robots.txt. Status code: {response.status_code}')
+            print(f'Failed to retrieve robots.txt from {url}/robots.txt.')
             return False
-    elif checkSitemapXml(url):
-        return url
+    sitemapResult = checkSitemapXml(url)
+    if sitemapResult:
+        return sitemapResult
     else:
         return False
 
@@ -53,9 +55,9 @@ def checkSitemapXml(url):
     response = makeRequest(url + '/sitemap.xml')
     if response:
         print(f'sitemap.xml is present at url: {url + "/sitemap.xml"}')
-        return True
+        return response
     else:
-        print(f'No sitemap.xml found at url: {url + "/sitemap.xml"}. Status code: {response.status_code}')
+        print(f'No sitemap.xml found at url: {url + "/sitemap.xml"}.')
         return False
 
 
@@ -71,7 +73,7 @@ def newsTagExists(sitemapUrl):
             # print(f'Tag <news:news> not found in sitemap at {sitemapUrl}')
             return False
     else:
-        print(f'Failed to retrieve sitemap from {sitemapUrl}. Status code: {response.status_code}')
+        print(f'Failed to retrieve sitemap from {sitemapUrl}.')
         return False
 
 
@@ -120,7 +122,7 @@ def newsArticleLang(url):
             print(f"Meta tag Content-Type not found.")
             return False
     else:
-        print(f"Failed to retrieve the webpage. HTTP Status Code: {response.status_code}")
+        print(f"Failed to retrieve the webpage")
         return False
 
 
@@ -204,5 +206,4 @@ def checkType(url):
             print(f"Meta tag og:type with content 'article' not found.")
             return False
     else:
-        print(f"Failed to retrieve the webpage. HTTP Status Code: {response.status_code}")
         return False

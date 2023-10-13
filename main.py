@@ -5,12 +5,16 @@ sitemapLinks = extractSitemapLinks(url)
 sitemapUrl = ''
 newsTagFlag = False
 isArticle = False
+locTag = ''
 if checkIfValidRobots(url) or checkSitemapXml(url):
     sitemapLinks = extractSitemapLinks(url)
 
     for i, sitemapUrl in enumerate(sitemapLinks):
         newsTagFlag = newsTagExists(sitemapUrl)
-        publicationDate = publicationDateExists(sitemapUrl)[0]
+        if publicationDateExists(sitemapUrl):
+            publicationDate = publicationDateExists(sitemapUrl)[0]
+        else:
+            break
         validDate = checkIfDateValid(publicationDate)
 
         if publicationDate and (validDate or validDate is None):
