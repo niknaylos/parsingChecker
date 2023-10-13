@@ -33,7 +33,7 @@ if checkIfValidRobots(url) or checkSitemapXml(url):
         if not lang:
             print(f'No language attribute found')
         else:
-            print(f'Language found')
+            print(lang)
 
 else:
     print('Not valid due to missing or invalid robots.txt')

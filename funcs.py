@@ -21,9 +21,9 @@ def checkIfValidRobots(url):
     """Check if robots.txt is present for url and sitemaps are present on robots.txt"""
     response = makeRequest(url + '/robots.txt')
     if response:
-        print('robots.txt exists')
+        # print('robots.txt exists')
         if 'Sitemap:' in response.text:
-            print('Sitemap found in robots.txt')
+            # print('Sitemap found in robots.txt')
             return True
         else:
             print('No Sitemap found in robots.txt')
@@ -81,8 +81,9 @@ def newsLangExists(sitemapUrl):
         soup = bs(response.content, 'xml')
         langTag = soup.find_all('news:language')
         if langTag:
-            print(f'found news:language on sitemap')
-            return True
+            lang = 'language: ' + langTag[0]
+            # print(f'found news:language on sitemap')
+            return lang
         else:
             print(f'news:language is not found')
             return False
@@ -94,30 +95,34 @@ def newsArticleLang(url):
         soup = bs(response.content, 'html.parser')
         og_locale_tag = soup.find('meta', {'property': 'og:locale'})
         if og_locale_tag:
-            print(f"Meta tag og:locale found with content '{og_locale_tag['content']}'.")
-            return True
+            lang = 'language: ' + og_locale_tag['content']
+            # print(f"Meta tag og:locale found with content '{og_locale_tag['content']}'.")
+            return lang
         else:
             print(f"Meta tag og:locale not found.")
 
         # Check for html lang attribute
         html_lang_tag = soup.find('html', lang=True)
         if html_lang_tag:
-            print(f"HTML lang attribute found with value '{html_lang_tag['lang']}'.")
-            return True
+            lang = 'language: ' + html_lang_tag['lang']
+            # print(f"HTML lang attribute found with value '{html_lang_tag['lang']}'.")
+            return lang
         else:
             print(f"HTML lang attribute not found.")
 
         # Check for Content-Type meta tag
         content_type_tag = soup.find('meta', {'http-equiv': 'Content-Type'})
         if content_type_tag:
-            print(f"Meta tag Content-Type found with content '{content_type_tag['content']}'.")
-            return True
+            lang = 'language: ' + content_type_tag['content']
+            # print(f"Meta tag Content-Type found with content '{content_type_tag['content']}'.")
+            return lang
         else:
             print(f"Meta tag Content-Type not found.")
             return False
     else:
         print(f"Failed to retrieve the webpage. HTTP Status Code: {response.status_code}")
         return False
+
 
 def publicationDateExists(sitemapUrl):
     response = makeRequest(sitemapUrl)
