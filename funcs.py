@@ -27,20 +27,23 @@ def checkIfValidRobots(url):
             return True
         else:
             print('No Sitemap found in robots.txt')
-            return checkSitemapXml(url)
+            return False
     else:
-        print('No robots.txt found. Checking for sitemap.xml')
-        return checkSitemapXml(url)
+        print('No robots.txt found.')
+        return False
 
 
 def extractSitemapLinks(url):
-    response = makeRequest(url + '/robots.txt')
-    if response:
-        sitemapLinks = re.findall(r'Sitemap:\s*(https?://\S+)', response.text, re.IGNORECASE)
-        return sitemapLinks
-    else:
-        print(f'Failed to retrieve robots.txt from {url}/robots.txt. Status code: {response.status_code}')
-        return False
+    if checkIfValidRobots(url):
+        response = makeRequest(url + '/robots.txt')
+        if response:
+            sitemapLinks = re.findall(r'Sitemap:\s*(https?://\S+)', response.text, re.IGNORECASE)
+            return sitemapLinks
+        else:
+            print(f'Failed to retrieve robots.txt from {url}/robots.txt. Status code: {response.status_code}')
+            return False
+    elif checkSitemapXml(url):
+        return url
 
 
 def checkSitemapXml(url):

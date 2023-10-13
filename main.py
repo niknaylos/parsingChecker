@@ -5,7 +5,7 @@ sitemapLinks = extractSitemapLinks(url)
 sitemapUrl = ''
 newsTagFlag = False
 isArticle = False
-if checkIfValidRobots(url):
+if checkIfValidRobots(url) or checkSitemapXml(url):
     sitemapLinks = extractSitemapLinks(url)
 
     for i, sitemapUrl in enumerate(sitemapLinks):
@@ -22,13 +22,12 @@ if checkIfValidRobots(url):
                 print(f'News Tag Present: {newsTagFlag}')
                 break  # Exit the loop if a valid locTag is found
 
-    if checkType(locTag):
+    if checkType(locTag) or newsTagFlag:
         print(f'{locTag} is an article')
         isArticle = True
     else:
         print(f'{locTag} has no og:type article')
-        if newsTagFlag:
-            isArticle = True
+
     if isArticle:
         lang = newsLangExists(sitemapUrl) or newsArticleLang(locTag)
         if not lang:
